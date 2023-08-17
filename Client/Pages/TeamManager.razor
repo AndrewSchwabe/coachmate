@@ -20,12 +20,12 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in teamMembers)
+            @foreach (var teamMember in teamMembers)
             {
                 <tr>
-                    <td>@forecast.FirstName</td>
-                    <td>@forecast.LastName</td>
-                    <td>@forecast.EmailAddress</td>
+                    <td>@teamMember.FirstName</td>
+                    <td>@teamMember.LastName</td>
+                    <td>@teamMember.EmailAddress</td>
                 </tr>
             }
         </tbody>
