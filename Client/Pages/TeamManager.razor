@@ -1,0 +1,32 @@
+﻿@page "/teammanager"
+@using BlazorApp.Shared;
+@using BlazorApp.Shared.TeamMember.Model;
+@inject HttpClient Http
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Team Manager</h1>
+
+@*@foreach( var teamMember in teamMembers)
+{
+    <div>@teamMember.FirstName</div>
+    <div>@teamMember.LastName</div>
+    <div>@teamMember.EmailAddress</div>
+}*@
+
+@code {
+    //private TeamMember[] teamMembers = new TeamMember[] { };
+        private string teamMembers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            teamMembers = await Http.GetFromJsonAsync<string>("/api/TeamMembers") ?? "";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+}

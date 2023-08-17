@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Net;
 using BlazorApp.Shared;
+using BlazorApp.Shared.TeamMember.Model;
+using BlazorApp.Shared.TeamMember.Repository;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -17,21 +19,12 @@ namespace ApiIsolated
             _logger = loggerFactory.CreateLogger<HttpTrigger>();
         }
 
-        [Function("WeatherForecast")]
+        [Function("TeamMembers")]
         public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
-            var randomNumber = new Random();
-            var temp = 0;
-
-            var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = temp = randomNumber.Next(-20, 55),
-                Summary = GetSummary(temp)
-            }).ToArray();
-
+            var repo = new TeamMemberRepository();
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.WriteAsJsonAsync(result);
+            response.WriteAsJsonAsync(repo.GetTeamMembers());
 
             return response;
         }
