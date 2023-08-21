@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Azure.Functions.Worker.Configuration;
 using Data.Configure;
+using System;
 
 namespace ApiIsolated
 {
@@ -10,11 +11,18 @@ namespace ApiIsolated
     {
         public static void Main()
         {
+
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
-                .ConfigureServices(s =>
+                .ConfigureServices((context, services) =>
                     {
-                        s.ConfigureDataServices();
+                        services.ConfigureDataServices(context.Configuration);
+                    }
+                )
+                .ConfigureAppConfiguration((context, builder) =>
+                    {
+                        builder.AddJsonFile("local.appsettings.json", true, true);
+                        builder.AddEnvironmentVariables();
                     }
                 )
                 .Build();

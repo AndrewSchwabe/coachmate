@@ -9,10 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{44C01AE9-CE30-4489-B2A7-F9BDABA8CBE2}"
 	ProjectSection(SolutionItems) = preProject
+		Api\.gitignore = Api\.gitignore
 		.github\workflows\azure-static-web-apps-witty-stone-01b87f010.yml = .github\workflows\azure-static-web-apps-witty-stone-01b87f010.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C238CDFB-C3F2-4F87-A62A-F3C0EEA1F12F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{C238CDFB-C3F2-4F87-A62A-F3C0EEA1F12F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
