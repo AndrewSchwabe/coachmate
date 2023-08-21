@@ -1,4 +1,4 @@
-﻿namespace BlazorApp.Shared.TeamMember.Model
+﻿namespace Data.TeamMember.Model
 {
     public class TeamMember
     {
