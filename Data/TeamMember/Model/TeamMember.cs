@@ -1,7 +1,4 @@
-﻿using Microsoft.Azure.Documents;
-using System.Text.Json.Serialization;
-
-namespace Data.TeamMember.Model
+﻿namespace Data.TeamMember.Model
 {
     public class TeamMember 
     {
