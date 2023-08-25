@@ -1,0 +1,37 @@
+﻿@using Data.TeamMember.Model;
+@inject HttpClient Http
+
+@if (teamMembers == null || !teamMembers.Any())
+{
+    <MudItem xs="12" Class="d-flex justify-center py-8">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    </MudItem>
+}
+else
+{
+    <MudItem xs="12">
+        <MudDataGrid Items="@teamMembers" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <Columns>
+                <PropertyColumn Property="x => x.FirstName" Title="First Name" />
+                <PropertyColumn Property="x => x.LastName" Title="Last Name" />
+                <PropertyColumn Property="x => x.EmailAddress" Title="Email" />
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+}
+
+@code {
+    private TeamMember[] teamMembers = new TeamMember[] { };
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/TeamMembers") ?? new TeamMember[] { };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+}
