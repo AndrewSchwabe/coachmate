@@ -4,29 +4,35 @@
 
 <PageTitle>Team Manager</PageTitle>
 
-@if (teamMembers == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <MudDataGrid Items="@teamMembers" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-        <Columns>
-            <PropertyColumn Property="x => x.FirstName" Title="First Name"/>
-            <PropertyColumn Property="x => x.LastName" Title="Last Name"/>
-            <PropertyColumn Property="x => x.EmailAddress" Title="Email" />
-        </Columns>
-    </MudDataGrid>
-}
+<MudGrid>
+    @if (teamMembers == null || !teamMembers.Any())
+    {
+        <MudItem xs="12" Class="d-flex oi-justify-center py-8">
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12">
+            <MudDataGrid Items="@teamMembers" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+                <Columns>
+                    <PropertyColumn Property="x => x.FirstName" Title="First Name" />
+                    <PropertyColumn Property="x => x.LastName" Title="Last Name" />
+                    <PropertyColumn Property="x => x.EmailAddress" Title="Email" />
+                </Columns>
+            </MudDataGrid>
+        </MudItem>
+    }
+</MudGrid>
 
 @code {
-    private TeamMember[] teamMembers = new TeamMember[]{};
+    private TeamMember[] teamMembers = new TeamMember[] { };
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/TeamMembers") ?? new TeamMember[]{};
+            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/TeamMembers") ?? new TeamMember[] { };
         }
         catch (Exception ex)
         {
