@@ -1,0 +1,36 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Client.Models.TeamMember;
+@inject HttpClient Http
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@model" />
+        <MudGrid Class="d-flex justify-content-center">
+            <MudItem xs="12">
+                <MudTextField Label="First Name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
+                <MudTextField Label="Last Name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
+                <MudTextField Label="Email" @bind-Value="model.EmailAddress" For="@(() => model.EmailAddress)" />
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="Submit">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    AddTeamMemberModel model = new AddTeamMemberModel();
+
+    private void Cancel() => MudDialog.Cancel();
+    private async Task Submit()
+    {
+        var result = await Http.PostAsJsonAsync("/api/teammember", model);
+        if (result.IsSuccessStatusCode)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+
+    }
+}

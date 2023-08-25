@@ -1,9 +1,12 @@
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Data.TeamMember.Model;
 using Data.TeamMember.Repository;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Api
 {
@@ -20,8 +23,8 @@ namespace Api
             _logger = loggerFactory.CreateLogger<TeamMemberController>();
         }
 
-        [Function("TeamMembers")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
+        [Function("GetTeamMembers")]
+        public async Task<HttpResponseData> GetList([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "teammembers")] HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
             var members = await _teamMemberRepository.GetTeamMembers();
@@ -30,24 +33,15 @@ namespace Api
             return response;
         }
 
-        private string GetSummary(int temp)
+        [Function("AddTeamMember")]
+        public async Task<HttpResponseData> Add([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "teammember")] HttpRequestData req)
         {
-            var summary = "Mild";
+            var bodyStream = new StreamReader(req.Body);
+            var teamMember = JsonConvert.DeserializeObject<TeamMember>(bodyStream.ReadToEnd());
+            var response = req.CreateResponse(HttpStatusCode.OK);
 
-            if (temp >= 32)
-            {
-                summary = "Hot";
-            }
-            else if (temp <= 16 && temp > 0)
-            {
-                summary = "Cold";
-            }
-            else if (temp <= 0)
-            {
-                summary = "Freezing";
-            }
-
-            return summary;
+            return response;
         }
+
     }
 }

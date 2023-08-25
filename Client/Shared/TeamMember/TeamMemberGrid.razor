@@ -1,5 +1,6 @@
 ﻿@using Data.TeamMember.Model;
 @inject HttpClient Http
+@inject IDialogService DialogService
 
 @if (teamMembers == null || !teamMembers.Any())
 {
@@ -9,6 +10,9 @@
 }
 else
 {
+    <MudItem xs="12" Class="d-flex justify-content-end">
+        <MudIconButton @onclick="OpenAddDialog" Icon="@Icons.Material.Outlined.AddBox" Color="Color.Tertiary" Size="Size.Large" />
+    </MudItem>
     <MudItem xs="12">
         <MudDataGrid Items="@teamMembers" Filterable="false" SortMode="@SortMode.None" Groupable="false">
             <Columns>
@@ -27,11 +31,21 @@ else
     {
         try
         {
-            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/TeamMembers") ?? new TeamMember[] { };
+            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/teammembers") ?? new TeamMember[] { };
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }
+    }
+
+    private void OpenAddDialog()
+    {
+        DialogService.Show<AddTeamMemberDialog>("Add Team Member", new DialogOptions
+            {
+
+                MaxWidth = MaxWidth.Small,
+                FullWidth = true
+            });
     }
 }

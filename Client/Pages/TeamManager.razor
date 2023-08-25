@@ -1,9 +1,10 @@
 ﻿@page "/teammanager"
+@using Client.Shared.TeamMember
 
 <PageTitle>Team Manager</PageTitle>
 
-<MudGrid>
-    <Client.Shared.TeamMember.TeamMemberGrid></Client.Shared.TeamMember.TeamMemberGrid>
+<MudGrid >
+    <TeamMemberGrid></TeamMemberGrid>
 </MudGrid>
 
 @code {
