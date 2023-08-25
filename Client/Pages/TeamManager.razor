@@ -2,7 +2,7 @@
 @using Data.TeamMember.Model;
 @inject HttpClient Http
 
-<h1>Team Manager</h1>
+<PageTitle>Team Manager</PageTitle>
 
 @if (teamMembers == null)
 {
@@ -10,25 +10,13 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>First</th>
-                <th>Last</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var teamMember in teamMembers)
-            {
-                <tr>
-                    <td>@teamMember.FirstName</td>
-                    <td>@teamMember.LastName</td>
-                    <td>@teamMember.EmailAddress</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <MudDataGrid Items="@teamMembers" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.FirstName" Title="First Name"/>
+            <PropertyColumn Property="x => x.LastName" Title="Last Name"/>
+            <PropertyColumn Property="x => x.EmailAddress" Title="Email" />
+        </Columns>
+    </MudDataGrid>
 }
 
 @code {
