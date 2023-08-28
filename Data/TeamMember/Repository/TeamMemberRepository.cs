@@ -12,6 +12,12 @@ namespace Data.TeamMember.Repository
             _dataContext= dataContext;
         }
 
+        public async Task AddTeamMember(Model.TeamMember teamMember)
+        {
+            await _dataContext.TeamMembers.AddAsync(teamMember);
+            await _dataContext.SaveChangesAsync();  
+        }
+
         public async Task<IEnumerable<Model.TeamMember>> GetTeamMembers()
         {
             return await _dataContext.TeamMembers.ToListAsync().ConfigureAwait(false);

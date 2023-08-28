@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ namespace Api
         {
             var bodyStream = new StreamReader(req.Body);
             var teamMember = JsonConvert.DeserializeObject<TeamMember>(bodyStream.ReadToEnd());
+            teamMember.Id = Guid.NewGuid().ToString();
+            await _teamMemberRepository.AddTeamMember(teamMember);
             var response = req.CreateResponse(HttpStatusCode.OK);
 
             return response;

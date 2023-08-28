@@ -29,6 +29,26 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadTeamData();
+    }
+
+    private async Task OpenAddDialog()
+    {
+        var dialog = DialogService.Show<AddTeamMemberDialog>("Add Team Member", new DialogOptions
+            {
+
+                MaxWidth = MaxWidth.Small,
+                FullWidth = true
+            });
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+            await LoadTeamData();
+    }
+
+    private async Task LoadTeamData()
+    {
         try
         {
             teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/teammembers") ?? new TeamMember[] { };
@@ -37,15 +57,5 @@ else
         {
             Console.WriteLine(ex.ToString());
         }
-    }
-
-    private void OpenAddDialog()
-    {
-        DialogService.Show<AddTeamMemberDialog>("Add Team Member", new DialogOptions
-            {
-
-                MaxWidth = MaxWidth.Small,
-                FullWidth = true
-            });
     }
 }
