@@ -8,7 +8,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">CoachMate</MudText>
         <MudSpacer />
-        <MudSwitch @bind-Checked="@_darkMode" Edge="Edge.End" Label="Dark Mode" />
+        <MudIcon @onclick="ToggleDarkMode" Icon="@Icons.Material.Filled.Autorenew" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
@@ -27,5 +27,10 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    void ToggleDarkMode()
+    {
+        _darkMode = !_darkMode;   
     }
 }
