@@ -4,5 +4,6 @@
     {
         Task<IEnumerable<Model.TeamMember>> GetTeamMembers();
         Task AddTeamMember(Model.TeamMember teamMember);
+        Task DeleteTeamMember(string id);
     }
 }

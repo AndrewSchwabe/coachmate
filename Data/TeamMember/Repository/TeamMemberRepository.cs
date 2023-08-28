@@ -18,6 +18,16 @@ namespace Data.TeamMember.Repository
             await _dataContext.SaveChangesAsync();  
         }
 
+        public async Task DeleteTeamMember(string id)
+        {
+            var teamMember = await _dataContext.TeamMembers.SingleOrDefaultAsync(tm => tm.Id == id).ConfigureAwait(false);
+            if (teamMember != null)
+            {
+                _dataContext.TeamMembers.Remove(teamMember);
+                await _dataContext.SaveChangesAsync();
+            }
+        }
+
         public async Task<IEnumerable<Model.TeamMember>> GetTeamMembers()
         {
             return await _dataContext.TeamMembers.ToListAsync().ConfigureAwait(false);

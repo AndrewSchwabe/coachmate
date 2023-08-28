@@ -34,6 +34,16 @@ namespace Api
             return response;
         }
 
+        [Function("DeleteTeamMember")]
+        public async Task<HttpResponseData> Delete([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "teammember/{id}")] HttpRequestData req,
+            string id)
+        {
+            await _teamMemberRepository.DeleteTeamMember(id);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+
+            return response;
+        }
+
         [Function("AddTeamMember")]
         public async Task<HttpResponseData> Add([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "teammember")] HttpRequestData req)
         {

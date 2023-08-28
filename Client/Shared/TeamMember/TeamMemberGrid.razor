@@ -2,7 +2,7 @@
 @inject HttpClient Http
 @inject IDialogService DialogService
 
-@if (teamMembers == null || !teamMembers.Any())
+@if (teamMembers == null && loadExecuting)
 {
     <MudItem xs="12" Class="d-flex justify-center py-8">
         <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
@@ -19,6 +19,13 @@ else
                 <PropertyColumn Property="x => x.FirstName" Title="First Name" />
                 <PropertyColumn Property="x => x.LastName" Title="Last Name" />
                 <PropertyColumn Property="x => x.EmailAddress" Title="Email" />
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudStack Row>
+                            <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Error" @onclick="() => Delete(context.Item)">Delete</MudButton>
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
             </Columns>
         </MudDataGrid>
     </MudItem>
@@ -26,6 +33,7 @@ else
 
 @code {
     private TeamMember[] teamMembers = new TeamMember[] { };
+    private bool loadExecuting = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,5 +65,20 @@ else
         {
             Console.WriteLine(ex.ToString());
         }
+        loadExecuting = false;
+    }
+
+    private async Task Delete(TeamMember teamMember)
+    {
+        try
+        {
+            await Http.DeleteFromJsonAsync<TeamMember>($"/api/teammember/{teamMember.Id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
+        await LoadTeamData();
     }
 }
