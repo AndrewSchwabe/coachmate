@@ -1,0 +1,83 @@
+﻿@using Data.Team.Model;
+@inject HttpClient Http
+@inject IDialogService DialogService
+
+@if (team == null && loadExecuting)
+{
+    <MudItem xs="12" Class="d-flex justify-center py-8">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    </MudItem>
+}
+else
+{
+    <MudItem xs="12" Class="d-flex justify-content-end">
+        <MudIconButton @onclick="OpenAddDialog" Icon="@Icons.Material.Outlined.AddBox" Color="Color.Tertiary" Size="Size.Large" />
+    </MudItem>
+    <MudItem xs="12">
+        <MudDataGrid Items="@team" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <Columns>
+                <PropertyColumn Property="x => x.Year" Title="Year" />
+                <PropertyColumn Property="x => x.Name" Title="Name" />
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudStack Row>
+                            <MudButton Size="@Size.Small" Variant="@Variant.Outlined" Color="@Color.Error" @onclick="() => Delete(context.Item)">Delete</MudButton>
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+}
+
+@code {
+    private Team[] team = new Team[] { };
+    private bool loadExecuting = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTeamData();
+    }
+
+    private async Task OpenAddDialog()
+    {
+        var dialog = DialogService.Show<AddTeamDialog>("Add Team", new DialogOptions
+            {
+
+                MaxWidth = MaxWidth.Small,
+                FullWidth = true
+            });
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+            await LoadTeamData();
+    }
+
+    private async Task LoadTeamData()
+    {
+        try
+        {
+            team = await Http.GetFromJsonAsync<Team[]>("/api/teams") ?? new Team[] { };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+        loadExecuting = false;
+    }
+
+    private async Task Delete(Team team)
+    {
+        try
+        {
+            await Http.DeleteFromJsonAsync<Team>($"/api/team/{team.Id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
+        await LoadTeamData();
+    }
+}

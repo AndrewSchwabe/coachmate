@@ -11,6 +11,7 @@ namespace Data.Context
         }
 
         public DbSet<TeamMember.Model.TeamMember> TeamMembers { get; set; }
+        public DbSet<Team.Model.Team> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +21,13 @@ namespace Data.Context
                 .HasPartitionKey(p => p.Id);
 
             modelBuilder.Entity<TeamMember.Model.TeamMember>().CamelCasePropertyNames();
+
+            modelBuilder.Entity<Team.Model.Team>()
+                .HasNoDiscriminator()
+                .ToContainer(nameof(Team.Model.Team))
+                .HasPartitionKey(p => p.Id);
+
+            modelBuilder.Entity<Team.Model.Team>().CamelCasePropertyNames();
         }
     }
 

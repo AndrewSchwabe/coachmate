@@ -1,0 +1,43 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Client.Models.Team;
+@using Client.Models.TeamMember;
+@inject HttpClient Http
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12">
+                    <MudCard Outlined="false">
+                        <MudCardContent>
+                            <MudTextField Label="Year" @bind-Value="model.Year" For="@(() => model.Year)" />
+                            <MudTextField Label="Name" @bind-Value="model.Name" For="@(() => model.Name)" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    AddTeamModel model = new AddTeamModel();
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        var result = await Http.PostAsJsonAsync("/api/team", model);
+        if (result.IsSuccessStatusCode)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+
+}

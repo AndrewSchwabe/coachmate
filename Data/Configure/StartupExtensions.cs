@@ -1,4 +1,5 @@
 ﻿using Data.Context;
+using Data.Team.Repository;
 using Data.TeamMember.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ namespace Data.Configure
                     $"{config["DatabaseId"]}");
             });
 
+            serviceCollection.AddTransient<ITeamRepository, TeamRepository>();
             serviceCollection.AddTransient<ITeamMemberRepository, TeamMemberRepository>();
         }
     }
