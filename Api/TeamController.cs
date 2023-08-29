@@ -1,13 +1,8 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using Data.Team.Repository;
-using Data.TeamMember.Model;
 using Newtonsoft.Json;
 using System.IO;
 using Data.Team.Model;
