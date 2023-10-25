@@ -1,0 +1,42 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Models.Schedule;
+
+@inject HttpClient Http
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12">
+                   @* <MudCard Outlined="false">
+                        <MudCardContent>
+                            <MudTextField Label="Title" @bind-Value="model.Title" For="@(() => model.Title)" />
+                            <MudDatePicker Label="Start" PickerVariant="PickerVariant.Dialog" DisableToolbar="true" @bind-Date="model.Start" For="@(() => model.Start)" />
+                            <MudDatePicker Label="End" PickerVariant="PickerVariant.Dialog" DisableToolbar="true" @bind-Date="model.End" For="@(() => model.End)" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add</MudButton>
+                        </MudCardActions>
+                    </MudCard>*@
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    AddScheduleEventModel model = new AddScheduleEventModel();
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        var result = await Http.PostAsJsonAsync("/api/schedule", model);
+        if (result.IsSuccessStatusCode)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+
+}

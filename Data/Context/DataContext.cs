@@ -12,6 +12,7 @@ namespace Data.Context
 
         public DbSet<TeamMember.Model.TeamMember> TeamMembers { get; set; }
         public DbSet<Team.Model.Team> Teams { get; set; }
+        public DbSet<Schedule.Model.ScheduleEvent> ScheduleEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,13 @@ namespace Data.Context
                 .HasPartitionKey(p => p.Id);
 
             modelBuilder.Entity<Team.Model.Team>().CamelCasePropertyNames();
+
+            modelBuilder.Entity<Schedule.Model.ScheduleEvent>()
+                .HasNoDiscriminator()
+                .ToContainer(nameof(Schedule.Model.ScheduleEvent))
+                .HasPartitionKey(p => p.Id);
+
+            modelBuilder.Entity<Schedule.Model.ScheduleEvent>().CamelCasePropertyNames();
         }
     }
 

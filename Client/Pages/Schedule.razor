@@ -1,0 +1,72 @@
+﻿@page "/schedule"
+@inject HttpClient Http
+@inject IDialogService DialogService
+@using Client.Shared.Schedule;
+@using Data.Schedule.Model
+@using Heron.MudCalendar
+
+
+<PageTitle>Schedule</PageTitle>
+
+<MudItem xs="12" Class="d-flex justify-content-end">
+    <MudIconButton @onclick="OpenAddDialog" Icon="@Icons.Material.Outlined.AddBox" Color="Color.Tertiary" Size="Size.Large" />
+</MudItem>
+<MudItem xs="12">
+    <MudCalendar Items="_events" />
+</MudItem>
+
+@code {
+    private List<CalendarItem> _events = new List<CalendarItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadScheduleData();
+    }
+
+    private async Task OpenAddDialog()
+    {
+
+        var dialog = DialogService.Show<AddScheduleEventDialog>("Add Event",
+        new DialogOptions
+            {
+                MaxWidth = MaxWidth.Small,
+                FullWidth = true
+            });
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+            await LoadScheduleData();
+    }
+
+    private async Task LoadScheduleData()
+    {
+        try
+        {
+            var scheduleEvents = await Http.GetFromJsonAsync<List<ScheduleEvent>>("/api/schedule") ?? new List<ScheduleEvent> { };
+            _events = Map(scheduleEvents);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+
+    private List<CalendarItem> Map(List<ScheduleEvent> scheduleEvents)
+    {
+        var calendarItems = new List<CalendarItem>();
+
+        foreach (var scheduleEvent in scheduleEvents)
+        {
+            calendarItems.Add(
+            new CalendarItem
+                {
+                    Start = scheduleEvent.Start,
+                    End = scheduleEvent.End,
+                    Text = scheduleEvent.Title
+                });
+        }
+
+        return calendarItems;
+    }
+}

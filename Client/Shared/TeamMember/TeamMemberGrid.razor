@@ -32,7 +32,7 @@ else
 }
 
 @code {
-    private TeamMember[] teamMembers = new TeamMember[] { };
+    private List<TeamMember> teamMembers = new List<TeamMember>();
     private bool loadExecuting = true;
 
     protected override async Task OnInitializedAsync()
@@ -44,7 +44,6 @@ else
     {
         var dialog = DialogService.Show<AddTeamMemberDialog>("Add Team Member", new DialogOptions
             {
-
                 MaxWidth = MaxWidth.Small,
                 FullWidth = true
             });
@@ -59,7 +58,7 @@ else
     {
         try
         {
-            teamMembers = await Http.GetFromJsonAsync<TeamMember[]>("/api/teammembers") ?? new TeamMember[] { };
+            teamMembers = await Http.GetFromJsonAsync<List<TeamMember>>("/api/teammembers") ?? new List<TeamMember>();
         }
         catch (Exception ex)
         {

@@ -1,4 +1,5 @@
 ﻿using Data.Context;
+using Data.Schedule.Repository;
 using Data.Team.Repository;
 using Data.TeamMember.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Data.Configure
 
             serviceCollection.AddTransient<ITeamRepository, TeamRepository>();
             serviceCollection.AddTransient<ITeamMemberRepository, TeamMemberRepository>();
+            serviceCollection.AddTransient<IScheduleRepository, ScheduleRepository>();
         }
     }
 }
