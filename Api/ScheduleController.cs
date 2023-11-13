@@ -8,6 +8,7 @@ using System.IO;
 using Data.Team.Model;
 using Data.Schedule.Repository;
 using Data.Schedule.Model;
+using System.Linq;
 
 namespace Api
 {
@@ -25,7 +26,7 @@ namespace Api
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
             var schedule = await _scheduleRepository.GetSchedule();
-            await response.WriteAsJsonAsync(schedule).ConfigureAwait(false);
+            await response.WriteAsJsonAsync(schedule.OrderBy(se => se.Start)).ConfigureAwait(false);
             return response;
         }
 

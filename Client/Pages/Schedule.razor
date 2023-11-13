@@ -11,9 +11,21 @@
 <MudItem xs="12" Class="d-flex justify-content-end">
     <MudIconButton @onclick="OpenAddDialog" Icon="@Icons.Material.Outlined.AddBox" Color="Color.Tertiary" Size="Size.Large" />
 </MudItem>
-<MudItem xs="12">
-    <MudCalendar Items="_events" />
-</MudItem>
+<MudGrid>
+    @foreach (var scheduleEvent in _events)
+    {
+        <MudItem xs="4">
+            <MudCard Outlined="true">
+                <MudCardHeader>
+                    <h3 class="mud-card-title">@scheduleEvent.Text</h3>
+                </MudCardHeader>
+                <MudCardContent>
+                    <p>@scheduleEvent.Start.Date</p>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
 
 @code {
     private List<CalendarItem> _events = new List<CalendarItem>();
